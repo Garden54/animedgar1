@@ -23,6 +23,7 @@ class FirstVC: UIViewController {
     var currentState: State = .first
 
     var backgroundURL: String?
+    var storedBG:  UIImage?
     var timeText: String!
     
     
@@ -37,7 +38,8 @@ class FirstVC: UIViewController {
         configBigView()
         setupBlur()
         setupTouchGesture()
-        loadBackGround()
+      //  loadBackGround()//
+        loadUIimage()
     }
     
     
@@ -87,7 +89,11 @@ class FirstVC: UIViewController {
             self.backgroundImageView.image = image
         }
     }
-    
+    func loadUIimage() {
+        guard storedBG != nil else { return }
+        backgroundImageView.image = storedBG
+       
+        }
     
     
     //

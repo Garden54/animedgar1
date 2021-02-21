@@ -17,7 +17,9 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollV: UIScrollView!
     @IBOutlet weak var addComment: UILabel!
     @IBOutlet weak var timeText: UILabel!
-    @IBOutlet weak var sbOutlet: UISearchBar!
+    @IBOutlet weak var operateurLabel: UILabel!
+    @IBOutlet weak var contourView: UIView!
+    @IBOutlet weak var webBar: UIView!
     
     var timeTextBeforeSetting: String!
     
@@ -35,11 +37,16 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
         setupToolBar()
         setupTouchGesture()
         setupLayout()
+        
+        operateurLabel.text = "Orange"
+        contourView.layer.cornerRadius = 10
+        
     }
     
     
     //
     override func viewDidAppear(_ animated: Bool) {
+        
         UIView.animate(withDuration: K.firstDurationLoadingBar) {
             self.loadingBar.setProgress(K.firstPercentLoadingBar, animated: true)
         } completion: { _ in
@@ -60,7 +67,8 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
         })
         
         DispatchQueue.main.asyncAfter(deadline: .now() + K.firstDurationLoadingBar + K.secondDurationLoadingBar, execute: {
-            self.loadingBar.isHidden = true
+        //    self.loadingBar.isHidden = true
+            self.loadingBar.setProgress(0, animated: false)
         })
     }
     
@@ -71,11 +79,21 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
     
     //
     func setupToolBar() {
-        let btn1 = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
-        let btn2 = UIBarButtonItem(image: UIImage(systemName: "chevron.right"), style: .plain, target: self, action: nil)
-        let btn3 = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: nil)
-        let btn4 = UIBarButtonItem(image: UIImage(systemName: "book"), style: .plain, target: self, action: nil)
-        let btn5 = UIBarButtonItem(image: UIImage(systemName: "square.on.square"), style: .plain, target: self, action: nil)
+     //   let btn1 = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: nil)
+//        let btn2 = UIBarButtonItem(image: UIImage(systemName: "chevron.right"), style: .plain, target: self, action: nil)
+//        let btn3 = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: nil)
+//        let btn4 = UIBarButtonItem(image: UIImage(systemName: "book"), style: .plain, target: self, action: nil)
+//        let btn5 = UIBarButtonItem(image: UIImage(systemName: "square.on.square"), style: .plain, target: self, action: nil)
+        let btn1 = UIBarButtonItem(image: UIImage(named: "SF_chevron_left_square_fill"), style: .plain, target: self, action: nil)
+        let btn2 = UIBarButtonItem(image: UIImage(named: "SF_chevron_right_square_fill"), style: .plain, target: self, action: nil)
+        let btn3 = UIBarButtonItem(image: UIImage(named: "SF_square_and_arrow_up_on_square"), style: .plain, target: self, action: nil)
+        let btn4 = UIBarButtonItem(image: UIImage(named: "SF_book_fill"), style: .plain, target: self, action: nil)
+        let btn5 = UIBarButtonItem(image: UIImage(named: "SF_square_on_square"), style: .plain, target: self, action: nil)
+        
+        let array = [btn1, btn2, btn3, btn4, btn5]
+        array.forEach { (btn) in
+            btn.imageInsets = UIEdgeInsets(top: 2, left: 0, bottom: -5, right: 0)
+        }
         let blankSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         btn1.isEnabled = false
         btn2.isEnabled = false
@@ -98,7 +116,6 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
     func setupLayout() {
         addComment.layer.cornerRadius = 5
         addComment.clipsToBounds = true
-        sbOutlet.backgroundImage = UIImage()
     }
     
     //

@@ -8,11 +8,13 @@
 import UIKit
 import PhotosUI
 
-class MenuViewController: UIViewController, PHPickerViewControllerDelegate {
+class MenuViewController: UIViewController,
+                          UIImagePickerControllerDelegate, UINavigationControllerDelegate
+                       //   PHPickerViewControllerDelegate
+{
     
     
     @IBOutlet weak var addBackgroundBtn: UIButton!
-    @IBOutlet weak var backgroundStatusBtn: UILabel!
     @IBOutlet weak var timeText: UILabel!
     
     private var backgroundURL: String?
@@ -21,33 +23,71 @@ class MenuViewController: UIViewController, PHPickerViewControllerDelegate {
     //
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkBackgroundStatus()
         checkAuth()
     }
 
 
+//    // Button to make user choose a background
+//    @IBAction func addBackgroundBtnPressed(_ sender: UIButton) {
+//        let photoLibrary = PHPhotoLibrary.shared()
+//        var configuration = PHPickerConfiguration(photoLibrary: photoLibrary)
+//        configuration.filter = .images
+//        let picker = PHPickerViewController(configuration: configuration)
+//        picker.delegate = self
+//        present(picker, animated: true, completion: nil)
+//    }
+    
+//    // Photo picker
+//    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+//        dismiss(animated: true, completion: nil)
+//        guard let newPix = results.compactMap(\.assetIdentifier).first else { return }
+//        backgroundURL = newPix
+//        checkBackgroundStatus()
+//    }
+    
+    
+    
     // Button to make user choose a background
     @IBAction func addBackgroundBtnPressed(_ sender: UIButton) {
-        let photoLibrary = PHPhotoLibrary.shared()
-        var configuration = PHPickerConfiguration(photoLibrary: photoLibrary)
-        configuration.filter = .images
-        let picker = PHPickerViewController(configuration: configuration)
+        picker.allowsEditing = true
         picker.delegate = self
-        present(picker, animated: true, completion: nil)
+        present(picker, animated: true)
     }
     
     // Photo picker
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        dismiss(animated: true, completion: nil)
-        guard let newPix = results.compactMap(\.assetIdentifier).first else { return }
-        backgroundURL = newPix
-        checkBackgroundStatus()
-    }
+//    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+//        dismiss(animated: true, completion: nil)
+//        guard let newPix = results.compactMap(\.assetIdentifier).first else { return }
+//        backgroundURL = newPix
+//        checkBackgroundStatus()
+//    }
     
-    // Change color of label if background is loaded
-    func checkBackgroundStatus() {
-        backgroundStatusBtn.backgroundColor = backgroundURL == nil ? .systemRed : .systemGreen
-        backgroundStatusBtn.text = backgroundURL == nil ? "PAS DE FOND" : "FOND OK"
+    
+    
+
+    let imagePicker = UIImagePickerController()
+    let picker = UIImagePickerController()
+
+
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
+
+    var storedBG: UIImage?
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+          //  self.imagePreview.image = image
+            storedBG = image
+            if storedBG == nil {
+                print("no")
+            } else {
+                print("yes")
+            }
+        }
+
+        self.picker.dismiss(animated: true, completion: nil)
     }
     
     // Button to make user set time for SecondVC
@@ -74,6 +114,7 @@ class MenuViewController: UIViewController, PHPickerViewControllerDelegate {
         if segue.identifier == "1to2" {
             let destinationVC = segue.destination as! FirstVC
             destinationVC.backgroundURL = backgroundURL
+            destinationVC.storedBG = storedBG
             destinationVC.timeText = timeText.text
         }
     }
