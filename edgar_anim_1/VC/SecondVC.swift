@@ -38,7 +38,7 @@ class SecondVC: UIViewController, UIScrollViewDelegate {
         setupTouchGesture()
         setupLayout()
         
-        operateurLabel.text = "Orange"
+        operateurLabel.text = "Prixtel"
         contourView.layer.cornerRadius = 10
         
     }
